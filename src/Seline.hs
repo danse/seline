@@ -16,18 +16,18 @@ seline
   :: Maybe Options
   -> [String]
   -> [String]
-  -> IO [String]
+  -> IO (Maybe [String])
 seline options choices' selected = do
   putStrLn $ format options' choices selected
   userLine <- (try getLine :: IO (Either IOError String))
   case userLine of
     (Left _) ->
       case selected of
-        [] -> pure []
+        [] -> pure Nothing
         h:t ->
           let c = words h <> choices
           in seline options c t
-    (Right "") -> pure selected
+    (Right "") -> pure . Just $ selected
     (Right line) ->
       let
         numbered :: Maybe String
