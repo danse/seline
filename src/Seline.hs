@@ -34,11 +34,11 @@ seline options choices' selected = do
         numbered = readMaybe line >>= atMay choices
         selection = fromMaybe line numbered
         s = selection:selected
-        c = consume (words selection) choices
+        c = choices \\ words selection
       in seline options c s
   where
     options' = fromMaybe defaultOptions options
-    choices = consume selected choices'
+    choices = choices' \\ selected
 
 format :: Options -> [String] -> [String] -> String
 format o c s =
@@ -54,6 +54,3 @@ format o c s =
         $ c
       context = intercalate " > " (reverse s)
   in activities <> "\n" <> context
-
-consume :: [String] -> [String] -> [String]
-consume consumed = (\\ consumed)
