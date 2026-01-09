@@ -96,7 +96,6 @@ test-suite seline-test
     hs-source-dirs:   test
 
     main-is: Main.hs
-    test-module: Main
 
     -- Test dependencies.
     build-depends:
