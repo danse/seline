@@ -31,7 +31,7 @@ seline options choices' selected = do
     (Right line) ->
       let
         numbered :: Maybe String
-        numbered = readMaybe line >>= atMay choices
+        numbered = readMaybe line >>= atMay choices . pred
         selection = fromMaybe line numbered
         s = selection:selected
         c = choices \\ words selection
@@ -47,7 +47,7 @@ format o c s =
       enumerate :: [String] -> [(Int, String)]
       enumerate a =
         let f = if shorter o then sortOn length else id
-        in reverse . zip [0..] . f $ a
+        in reverse . zip [1..] . f $ a
       activities = intercalate ",  "
         . fmap enumerated
         . enumerate

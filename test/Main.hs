@@ -10,4 +10,4 @@ main = hspec $ do
     let o = Options True
         c = ["1", "12", "123"]
         s = []
-    in format o c s `shouldBe` "123 · 2,  12 · 1,  1 · 0\n"
+    in format o c s `shouldBe` "123 · 3,  12 · 2,  1 · 1\n"
