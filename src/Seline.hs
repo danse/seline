@@ -1,4 +1,4 @@
-module Seline (seline, format, Options(..)) where
+module Seline (simple, seline, format, Options(..)) where
 
 import Control.Exception (try)
 import Data.List (intercalate, sortOn, (\\))
@@ -11,6 +11,9 @@ newtype Options = Options { shorter :: Bool }
 
 defaultOptions :: Options
 defaultOptions = Options False
+
+simple :: [String] -> IO (Maybe [String])
+simple s = seline Nothing s []
 
 seline
   :: Maybe Options
