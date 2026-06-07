@@ -27,7 +27,9 @@ simple s = seline Nothing s []
 seline
   :: Maybe Options
   -> [String]
+  -- ^ Choices for the user
   -> [String]
+  -- ^ Selected choices
   -> IO (Maybe [String])
 seline options choices' selected = do
   let choices = choices' \\ selected
