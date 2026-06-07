@@ -3,7 +3,7 @@ module Seline
   ( simple,
     seline,
     Options(..),
-    -- | Internal functions exported for testing
+    -- ** Internal functions exported for testing
     format,
     user,
     Action(..)
@@ -16,7 +16,9 @@ import Safe (atMay)
 import System.IO.Error ()
 import Text.Read (readMaybe)
 
-newtype Options = Options { shorter :: Bool }
+newtype Options = Options {
+  shorter :: Bool -- ^ Assign smaller numbers to shorter choices (default False)
+  }
 
 defaultOptions :: Options
 defaultOptions = Options False
