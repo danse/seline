@@ -1,4 +1,13 @@
-module Seline (simple, seline, format, Options(..)) where
+{-# LANGUAGE LambdaCase #-}
+module Seline
+  ( simple,
+    seline,
+    Options(..),
+    -- | Internal functions exported for testing
+    format,
+    user,
+    Action(..)
+  ) where
 
 import Control.Exception (try)
 import Data.List (intercalate, sortOn, (\\))
@@ -21,27 +30,33 @@ seline
   -> [String]
   -> IO (Maybe [String])
 seline options choices' selected = do
-  putStrLn $ format options' choices selected
-  userLine <- (try getLine :: IO (Either IOError String))
-  case userLine of
-    (Left _) ->
-      case selected of
-        [] -> pure Nothing
-        h:t ->
-          let c = words h <> choices
-          in seline options c t
-    (Right "") -> pure . Just $ selected
-    (Right line) ->
-      let
-        numbered :: Maybe String
-        numbered = readMaybe line >>= atMay choices . pred
-        selection = fromMaybe line numbered
-        s = selection:selected
-        c = choices \\ words selection
-      in seline options c s
-  where
-    options' = fromMaybe defaultOptions options
-    choices = choices' \\ selected
+  let choices = choices' \\ selected
+  putStrLn $ format (fromMaybe defaultOptions options) choices selected
+  line <- try getLine
+  case user choices selected line of
+    Quit -> pure Nothing
+    Specify c t -> seline options c t
+    Enter -> pure . Just $ selected
+
+data Action = Quit | Specify [String] [String] | Enter deriving (Show, Eq)
+
+user :: [String] -> [String] -> Either IOError String -> Action
+user choices selected = \case
+  (Left _) ->
+    case selected of
+      [] -> Quit
+      h:t ->
+        let c = words h <> choices
+        in Specify c t
+  (Right "") -> Enter
+  (Right line) ->
+    let
+      numbered :: Maybe String
+      numbered = readMaybe line >>= atMay choices . pred
+      selection = fromMaybe line numbered
+      s = selection:selected
+      c = choices \\ words selection
+    in Specify c s
 
 format :: Options -> [String] -> [String] -> String
 format o c s =
