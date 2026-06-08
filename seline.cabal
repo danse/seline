@@ -20,7 +20,7 @@ name:               seline
 -- PVP summary:     +-+------- breaking API changes
 --                  | | +----- non-breaking API additions
 --                  | | | +--- code changes with no API change
-version:            0.3.2.1
+version:            0.3.2.2
 
 -- A short (one-line) description of the package.
 synopsis: command line interface to select from a list of options
@@ -67,8 +67,8 @@ library
     -- other-extensions:
 
     -- Other library packages from which modules are imported.
-    build-depends:    base ^>=4.17.2.1,
-                      safe ^>=0.3.21
+    build-depends: base >= 4.18.3 && < 4.19,
+                   safe >= 0.3.21 && < 0.4
 
     -- Directories containing source files.
     hs-source-dirs:   src
